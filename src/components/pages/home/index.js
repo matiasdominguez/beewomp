@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import useSound from 'use-sound';
 import { useLocation, useHistory } from 'react-router-dom';
 import './index.css';
@@ -17,8 +17,57 @@ const Home = ({ user, firebase }) => {
   const hasJoinedRoom = pathname !== '/';
   const roomId        = hasJoinedRoom && pathname.replace('/','')
 
+  const database = firebase.database();
+
+  const username = user.email || 'Guest'
+
+  const handleUpdateRoomState = ({ roomState, key }) => {
+    if (roomState === null) {
+      const newRoom = database.ref(`/${key}`);
+
+      newRoom
+        .set({
+          triggeredBy: username,
+          sound:       ''
+        })
+        .then(() => {});
+    }
+    setRoomState(roomState);
+  }
+
+  useEffect(() => {
+    if (roomId) {
+      const roomRef = database.ref(`/${roomId}`);
+
+      roomRef
+        .on('value', snapshot => handleUpdateRoomState({
+          key: roomRef.key,
+          roomState: snapshot.val()
+        }));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [0])
+
   const [activeSounds, setActiveSounds] = useState([]);
   const [roomToJoin, setRoomToJoin]     = useState('');
+  const [roomState, setRoomState]       = useState({});
+
+  const previousRoomState = usePrevious(roomState);
+
+  useEffect(() => {
+    if (previousRoomState !== roomState) {
+      const soundId = roomState?.sound?.split('_')[0]
+
+      if (soundId) {
+        setActiveSounds(activeSounds => {
+          if (!activeSounds.includes(soundId)) {
+            return [...activeSounds, soundId]
+          }
+          return activeSounds
+        });
+      }
+    }
+  }, [previousRoomState, roomState])
 
   const handleChangeRoomToJoin = ({ target: { value: updatedRoomToJoin } }) => {
     setRoomToJoin(updatedRoomToJoin);
@@ -31,15 +80,30 @@ const Home = ({ user, firebase }) => {
   const previousActiveSounds = usePrevious(activeSounds);
 
   const handleOnClickPlay = soundId => {
-    setActiveSounds(activeSounds => {
-      if (!activeSounds.includes(soundId)) {
-        return [...activeSounds, soundId]
-      }
-      return activeSounds
-    });
+    const stateRef = database.ref(`/${roomId}`);
+
+    stateRef
+      .set({
+        triggeredBy: username,
+        sound:       `${soundId}_${Date.now()}`
+      })
+      .then(() => {
+        console.log(`Setting sound: ${soundId}`)
+      })
   }
 
   const handleOnEnd = soundId => {
+    const stateRef = database.ref(`/${roomId}`);
+
+    stateRef
+      .set({
+        triggeredBy: '',
+        sound:       ''
+      })
+      .then(() => {
+        console.log(`Resetting server state: ${soundId}`)
+      })
+
     setActiveSounds(
       activeSounds => activeSounds.filter(activeSoundId => activeSoundId !== soundId)
     );
@@ -73,7 +137,7 @@ const Home = ({ user, firebase }) => {
     return (
       <div className="page-home">
         <div className="page-home-container">
-          {JSON.stringify({ activeSounds, roomId })}
+          {JSON.stringify({ activeSounds, roomState })}
           <SoundButton
             soundId={'laughTrack1'}
             activeSounds={activeSounds}
