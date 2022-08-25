@@ -3,8 +3,6 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
-  useLocation
 } from "react-router-dom";
 import "firebase/auth";
 import { FirestoreProvider } from "@react-firebase/firestore";

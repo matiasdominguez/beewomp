@@ -1,12 +1,15 @@
 import React, { Fragment } from "react";
 import "./index.css";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faEllipsisH } from "@fortawesome/free-solid-svg-icons";
 
 const Footer = ({ user, firebase }) => {
+  const history = useHistory();
+
   const handleClickLogout = () => {
     firebase.auth().signOut();
+    history.push('/');
   }
 
   if (user && firebase) {
