@@ -12,7 +12,7 @@ const Login = ({ firebase }) => {
   return (
     <div className="section-login">
       <div className="welcome-title">Welcome to <span className="bold">🐝 Bee Womp</span></div>
-      <div className="welcome-message">To use a bee womp soundboard, please sign in with one of the following options:</div>
+      <div className="welcome-message">To use a soundboard, please sign in with one of the following options:</div>
       <div
         className="log-in-btn"
         onClick={() => {
