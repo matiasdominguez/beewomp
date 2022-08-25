@@ -1,0 +1,31 @@
+.welcome-title {
+  font-size: 2.5em;
+  font-weight: 100;
+  margin-bottom: 0.25em;
+  margin-top: 2em;
+}
+
+.welcome-message {
+  font-size: 1.25em;
+  opacity: 0.5;
+  font-weight: 100;
+  margin-bottom: 1em;
+}
+
+.bold {
+  font-weight: 700;
+}
+
+.log-in-btn {
+  border-left: 2px solid white;
+  padding: 1em;
+  cursor: pointer;
+}
+
+.log-in-btn:hover {
+  opacity: 0.5;
+}
+
+.log-in-btn:active {
+  opacity: 0.25;
+}

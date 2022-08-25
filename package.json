@@ -1,0 +1,53 @@
+{
+  "name": "beewomp",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "1.2.31",
+    "@fortawesome/free-brands-svg-icons": "5.15.0",
+    "@fortawesome/free-solid-svg-icons": "5.15.0",
+    "@fortawesome/react-fontawesome": "0.1.11",
+    "@react-firebase/auth": "^0.2.10",
+    "@react-firebase/firestore": "^0.5.5",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
+    "emoji-picker-react": "^3.4.6",
+    "firebase": "^8.6.1",
+    "moment": "^2.29.1",
+    "random-material-color": "^1.0.5",
+    "react": "^16.13.1",
+    "react-copy-to-clipboard": "^5.0.3",
+    "react-dom": "^16.13.1",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "3.4.3",
+    "react-spinners": "^0.11.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "predeploy": "env-cmd -f .env npm run build",
+    "deploy": "firebase deploy"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "homepage": "https://emoji-moments.web.app",
+  "devDependencies": {
+    "env-cmd": "^10.1.0"
+  }
+}

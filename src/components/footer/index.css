@@ -1,0 +1,15 @@
+.page-footer {
+  font-weight: 100;
+  font-size: 0.75em;
+  text-align: center;
+  margin-top: 2em;
+  opacity: 0.25;
+}
+
+.page-footer-bold {
+  font-weight: 800;
+}
+
+.page-footer-logout-btn {
+  cursor: pointer;
+}

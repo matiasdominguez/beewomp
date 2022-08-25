@@ -1,0 +1,97 @@
+.app {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+}
+
+.app-container {
+  width: 95%;
+  margin: 2.5%;
+}
+
+@media only screen and (max-width: 768px) {
+  .app-container {
+    font-size: 0.9em;
+    height: 90%;
+  }
+}
+
+@media only screen and (min-width: 992px) {
+  .app-container {
+    width: 85%;
+  }
+}
+
+.typing-area {
+  opacity: 0;
+  position: absolute;
+}
+
+.row {
+  display: flex;
+  margin: 0px 1em 0px 1em;
+}
+
+.mt-10-negative {
+  margin-top: -10px;
+}
+
+.grid {
+  display: -webkit-box; /* Not needed if autoprefixing */
+  display: -ms-flexbox; /* Not needed if autoprefixing */
+  display: flex;
+  width: 100%;
+}
+
+.app-loading {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  height: 80vh;
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #546E7A;
+  opacity: 1; /* Firefox */
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: #546E7A;
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+  color: #546E7A;
+}
+
+.color-red { color: #d32f2f; }
+.border-red { border-color: #d32f2f !important; }
+.bg-red { background-color: #d32f2f !important; }
+.color-pink { color: #C2185B; }
+.border-pink { border-color: #C2185B !important; }
+.bg-pink { background-color: #C2185B !important; }
+.color-purple { color: #7B1FA2; }
+.border-purple { border-color: #7B1FA2 !important; }
+.bg-purple { background-color: #7B1FA2 !important; }
+.color-blue { color: #303F9F; }
+.border-blue { border-color: #303F9F !important; }
+.bg-blue { background-color: #303F9F !important; }
+.color-light-blue { color: #1976D2; }
+.border-light-blue { border-color: #1976D2 !important; }
+.bg-light-blue { background-color: #1976D2 !important; }
+.color-teal { color: #00796B; }
+.border-teal { border-color: #00796B !important; }
+.bg-teal { background-color: #00796B !important; }
+.color-green { color: #388E3C; }
+.border-green { border-color: #388E3C !important; }
+.bg-green { background-color: #388E3C !important; }
+.color-yellow { color: #FBC02D; }
+.border-yellow { border-color: #FBC02D !important; }
+.bg-yellow { background-color: #FBC02D !important; }
+.color-orange { color: #E64A19; }
+.border-orange { border-color: #E64A19 !important; }
+.bg-orange { background-color: #E64A19 !important; }
+.color-gray { color: #455A64; }
+.border-gray { border-color: #455A64 !important; }
+.bg-gray { background-color: #455A64 !important; }

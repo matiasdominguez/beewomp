@@ -1,0 +1,10 @@
+body {
+  font-family: "DM Sans", sans-serif;
+  color: #ffc048;
+  background-color: #1e272e;
+}
+
+a {
+  color: inherit; /* blue colors for links too */
+  text-decoration: inherit; /* no underline */
+}
