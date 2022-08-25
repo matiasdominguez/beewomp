@@ -16,7 +16,7 @@ const config = {
 };
 
 ReactDOM.render(
-  <React.StrictMode>
+  <>
     <FirebaseAuthProvider firebase={firebase} {...config}>
       <FirebaseAuthConsumer>
         {({ isSignedIn, user }) => {
@@ -32,6 +32,6 @@ ReactDOM.render(
         }}
       </FirebaseAuthConsumer>
     </FirebaseAuthProvider>
-  </React.StrictMode>,
+  </>,
   document.getElementById("root")
 );
