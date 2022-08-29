@@ -1,0 +1,22 @@
+.sound-button {
+  cursor: pointer;
+  font-size: 2em;
+  border: 1px solid #ffc048;
+  padding: 10px;
+  margin: 10px;
+  flex: 1;
+  flex-basis: 25%;
+  text-align: center;
+  border-radius: 5px;
+  transition: 200ms ease-in-out opacity;
+  width: 25%;
+}
+
+.sound-button:hover {
+  opacity: 0.5;
+}
+
+.sound-button:active {
+  opacity: 0.25;
+}
+

@@ -12,13 +12,23 @@ import Footer from '../../footer';
 import SoundButton from '../../sound-button';
 import { usePrevious } from '../../../utils/hooks';
 
+const DEFAULT_SOUND_LENGTH_RULE = 5;
+
 const toastOptions = {
   style: {
     border: '1px solid #ffc048',
-    padding: '16px',
     color: '#ffc048',
     backgroundColor: '#1e272e'
   }
+}
+
+const soundIcon = {
+  'laughTrack1': '😂',
+  'booWomp': '😢'
+}
+
+const soundLengthRules = {
+  'laughTrack1': 2
 }
 
 const Home = ({ user, firebase, setIsLoading }) => {
@@ -81,10 +91,10 @@ const Home = ({ user, firebase, setIsLoading }) => {
       const whenTriggered  = moment(Number(timeStamp))
 
       if (triggeredBy && soundId && whenTriggered.isAfter(fiveSecondsAgo)) {
-        toast(triggeredBy, { icon: '🐝' , ...toastOptions });
+        toast(triggeredBy, { icon: soundIcon[soundId] || '🐝', ...toastOptions });
 
         setActiveSounds(currentActiveSounds => {
-          if (currentActiveSounds.filter(s => s === soundId).length < 5) {
+          if (currentActiveSounds && currentActiveSounds.filter(s => s === soundId).length < (soundLengthRules[soundId] || DEFAULT_SOUND_LENGTH_RULE)) {
             return [...currentActiveSounds, soundId]
           }
         });
@@ -133,14 +143,8 @@ const Home = ({ user, firebase, setIsLoading }) => {
     });
   }
 
-  const [playLaughTrack1] = useSound(laughTrack1, {
-    onend: () => handleOnEnd('laughTrack1')
-  });
-
-  const [playBooWomp] = useSound(booWomp, {
-    onend: () => handleOnEnd('booWomp')
-  });
-
+  const [playLaughTrack1] = useSound(laughTrack1, { onend: () => handleOnEnd('laughTrack1') });
+  const [playBooWomp]     = useSound(booWomp, { onend: () => handleOnEnd('booWomp') });
 
   const lastSoundTriggered = activeSounds && activeSounds[activeSounds.length - 1]
 
@@ -148,40 +152,28 @@ const Home = ({ user, firebase, setIsLoading }) => {
     && lastSoundTriggered
     && activeSounds.filter(
       soundId => soundId === lastSoundTriggered
-    ).length < 5
+    ).length < (soundLengthRules[lastSoundTriggered] || DEFAULT_SOUND_LENGTH_RULE)
     && previousActiveSounds.filter(s => s === lastSoundTriggered).length < activeSounds.filter(s => s === lastSoundTriggered).length
 
   if (canPlaySound) {
-    if (lastSoundTriggered === 'laughTrack1') {
-      console.log('Playing sound: laughTrack1')
-      playLaughTrack1()
-    }
-    if (lastSoundTriggered === 'booWomp') {
-      console.log('Playing sound: booWomp')
-      playBooWomp()
-    }
+    if (lastSoundTriggered === 'laughTrack1') playLaughTrack1();
+    if (lastSoundTriggered === 'booWomp')     playBooWomp();
   }
 
   if (hasJoinedRoom) {
     return (
       <div className="page-home">
         <div className="page-home-container">
-          <SoundButton
-            soundId={'laughTrack1'}
-            activeSounds={activeSounds}
-            file={laughTrack1}
-            label={'😂'}
-            onEnd={handleOnEnd}
-            onClickPlay={handleOnClickPlay}
-          />
-          <SoundButton
-            soundId={'booWomp'}
-            activeSounds={activeSounds}
-            file={booWomp}
-            label={'😢'}
-            onEnd={handleOnEnd}
-            onClickPlay={handleOnClickPlay}
-          />
+          {['laughTrack1', 'booWomp'].map(soundId => (
+            <SoundButton
+              soundId={soundId}
+              activeSounds={activeSounds}
+              file={laughTrack1}
+              label={soundIcon[soundId] || `${soundId}`}
+              onEnd={handleOnEnd}
+              onClickPlay={handleOnClickPlay}
+            />
+          ))}
         </div>
         <Footer firebase={firebase} user={user} />
       </div>

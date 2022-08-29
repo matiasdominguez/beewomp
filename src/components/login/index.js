@@ -1,6 +1,4 @@
 import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHandHoldingHeart } from "@fortawesome/free-solid-svg-icons";
 import { useHistory } from "react-router-dom";
 import "./index.css";
 
@@ -11,7 +9,7 @@ const Login = ({ firebase }) => {
 
   return (
     <div className="section-login">
-      <div className="welcome-title">Welcome to <span className="bold">🐝 Bee Womp</span></div>
+      <div className="welcome-title">🐝 Welcome to <span className="bold"><u>Bee Womp</u></span></div>
       <div className="welcome-message">To use a soundboard, please sign in with one of the following options:</div>
       <div
         className="log-in-btn"

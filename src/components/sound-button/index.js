@@ -1,4 +1,5 @@
 import React from 'react';
+import './index.css';
 
 const SoundButton = ({
   label,
@@ -6,11 +7,12 @@ const SoundButton = ({
   onClickPlay
 }) => {
   return (
-    <button
+    <div
+      className="sound-button"
       onClick={() => onClickPlay(soundId)}
     >
       {label}
-    </button>
+    </div>
   )
 };
 
