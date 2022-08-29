@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import useSound from 'use-sound';
 import { useLocation } from 'react-router-dom';
+import moment from 'moment';
 import './index.css';
 
 import laughTrack1 from '../../../sounds/laugh-track-1.mp3';
@@ -55,18 +56,24 @@ const Home = ({ user, firebase, setIsLoading }) => {
   const [roomToJoin, setRoomToJoin]     = useState('');
   const [roomState, setRoomState]       = useState({});
 
-  const previousRoomState = usePrevious(roomState);
+  const previousRoomState    = usePrevious(roomState);
+  const previousActiveSounds = usePrevious(activeSounds);
 
   useEffect(() => {
-    if (previousRoomState !== roomState) {
-      const soundId = roomState?.sound?.split('_')[0]
+    const soundHasBeenTriggered = previousRoomState !== roomState
+    const canExtractId          = roomState?.sound && roomState.sound.includes('_')
 
-      if (soundId) {
-        setActiveSounds(activeSounds => {
-          if (!activeSounds.includes(soundId)) {
-            return [...activeSounds, soundId]
+    if (soundHasBeenTriggered && canExtractId) {
+      const [soundId, timeStamp] = roomState?.sound?.split('_')
+
+      const fiveSecondsAgo = moment().subtract(5, 'seconds')
+      const whenTriggered  = moment(Number(timeStamp))
+
+      if (soundId && whenTriggered.isAfter(fiveSecondsAgo)) {
+        setActiveSounds(currentActiveSounds => {
+          if (currentActiveSounds.filter(s => s === soundId).length < 5) {
+            return [...currentActiveSounds, soundId]
           }
-          return activeSounds
         });
       }
     }
@@ -80,8 +87,6 @@ const Home = ({ user, firebase, setIsLoading }) => {
     setIsLoading(true);
     window.location.assign(`/${roomToJoin}`);
   }
-
-  const previousActiveSounds = usePrevious(activeSounds);
 
   const handleOnClickPlay = soundId => {
     const stateRef = database.ref(`/${roomId}`);
@@ -97,20 +102,23 @@ const Home = ({ user, firebase, setIsLoading }) => {
   }
 
   const handleOnEnd = soundId => {
-    const stateRef = database.ref(`/${roomId}`);
+    setActiveSounds(currentActiveSounds => {
+      let foundItem = false;
+      let updatedActiveSounds = []
 
-    stateRef
-      .set({
-        triggeredBy: '',
-        sound:       ''
-      })
-      .then(() => {
-        console.log(`Resetting server state: ${soundId}`)
-      })
+      if (currentActiveSounds) {
+        for (var i = 0; i < currentActiveSounds.length; i++) {
+          if (currentActiveSounds[i] === soundId && foundItem === false) {
+            foundItem = true;
+          } else {
+            updatedActiveSounds = [...updatedActiveSounds, currentActiveSounds[i]]
+          }
+        }
+      }
 
-    setActiveSounds(
-      activeSounds => activeSounds.filter(activeSoundId => activeSoundId !== soundId)
-    );
+
+      return updatedActiveSounds
+    });
   }
 
   const [playLaughTrack1] = useSound(laughTrack1, {
@@ -121,12 +129,17 @@ const Home = ({ user, firebase, setIsLoading }) => {
     onend: () => handleOnEnd('booWomp')
   });
 
+
   const lastSoundTriggered = activeSounds && activeSounds[activeSounds.length - 1]
 
-  if (
-    activeSounds && previousActiveSounds
-      && !previousActiveSounds.includes(lastSoundTriggered)
-  ) {
+  const canPlaySound = `${activeSounds}` !== `${previousActiveSounds}`
+    && lastSoundTriggered
+    && activeSounds.filter(
+      soundId => soundId === lastSoundTriggered
+    ).length < 5
+    && previousActiveSounds.filter(s => s === lastSoundTriggered).length < activeSounds.filter(s => s === lastSoundTriggered).length
+
+  if (canPlaySound) {
     if (lastSoundTriggered === 'laughTrack1') {
       console.log('Playing sound: laughTrack1')
       playLaughTrack1()
