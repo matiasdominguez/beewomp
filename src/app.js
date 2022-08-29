@@ -6,20 +6,20 @@ import {
 } from "react-router-dom";
 import "firebase/auth";
 import { FirestoreProvider } from "@react-firebase/firestore";
-import { GridLoader } from "react-spinners"
+import { ScaleLoader } from "react-spinners"
 
 import "./app.css";
 import Navigation from "./components/navigation";
 import Login from './components/login';
 import Home from './components/pages/home';
 
-const TWO_SECONDS = 2000;
+const ONE_SECOND = 1000;
 
 function App({ isSignedIn, user, config, firebase }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    let loadingTimeout = setTimeout(() => setIsLoading(false), TWO_SECONDS);
+    let loadingTimeout = setTimeout(() => setIsLoading(false), ONE_SECOND);
     return () => {
       clearTimeout(loadingTimeout);
     }
@@ -28,7 +28,7 @@ function App({ isSignedIn, user, config, firebase }) {
   if (isLoading) {
     return (
       <div className="app-loading">
-        <GridLoader size={20} margin={5} color="white" />
+        <ScaleLoader size={20} margin={5} color="white" />
       </div>
     );
   }
@@ -45,7 +45,11 @@ function App({ isSignedIn, user, config, firebase }) {
               <Switch>
                 <Route path="/">
                   {isSignedIn ? (
-                    <Home firebase={firebase} user={user} />
+                    <Home
+                      firebase={firebase}
+                      user={user}
+                      setIsLoading={setIsLoading}
+                    />
                   ) : (
                     <Login firebase={firebase} />
                   )}

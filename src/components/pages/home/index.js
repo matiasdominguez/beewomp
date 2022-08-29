@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import useSound from 'use-sound';
-import { useLocation, useHistory } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import './index.css';
 
 import laughTrack1 from '../../../sounds/laugh-track-1.mp3';
@@ -10,9 +10,8 @@ import Footer from '../../footer';
 import SoundButton from '../../sound-button';
 import { usePrevious } from '../../../utils/hooks';
 
-const Home = ({ user, firebase }) => {
+const Home = ({ user, firebase, setIsLoading }) => {
   const { pathname } = useLocation();
-  const history      = useHistory();
 
   const hasJoinedRoom = pathname !== '/';
   const roomId        = hasJoinedRoom && pathname.replace('/','')
@@ -35,15 +34,19 @@ const Home = ({ user, firebase }) => {
     setRoomState(roomState);
   }
 
+  const assignRoomStateUpdateEvent = () => {
+    const roomRef = database.ref(`/${roomId}`);
+
+    roomRef
+      .on('value', snapshot => handleUpdateRoomState({
+        key: roomRef.key,
+        roomState: snapshot.val()
+      }));
+  }
+
   useEffect(() => {
     if (roomId) {
-      const roomRef = database.ref(`/${roomId}`);
-
-      roomRef
-        .on('value', snapshot => handleUpdateRoomState({
-          key: roomRef.key,
-          roomState: snapshot.val()
-        }));
+      assignRoomStateUpdateEvent()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [0])
@@ -74,7 +77,8 @@ const Home = ({ user, firebase }) => {
   }
 
   const handleClickJoinRoom = () => {
-    history.push(roomToJoin)
+    setIsLoading(true);
+    window.location.assign(`/${roomToJoin}`);
   }
 
   const previousActiveSounds = usePrevious(activeSounds);
@@ -137,7 +141,9 @@ const Home = ({ user, firebase }) => {
     return (
       <div className="page-home">
         <div className="page-home-container">
-          {JSON.stringify({ activeSounds, roomState })}
+          <pre>
+            {JSON.stringify({ activeSounds, roomState }, null, 2)}
+          </pre>
           <SoundButton
             soundId={'laughTrack1'}
             activeSounds={activeSounds}
