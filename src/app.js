@@ -7,6 +7,7 @@ import {
 import "firebase/auth";
 import { FirestoreProvider } from "@react-firebase/firestore";
 import { ScaleLoader } from "react-spinners"
+import { Toaster } from "react-hot-toast"
 
 import "./app.css";
 import Navigation from "./components/navigation";
@@ -59,6 +60,10 @@ function App({ isSignedIn, user, config, firebase }) {
           </Router>
         </FirestoreProvider>
       </div>
+      <Toaster
+        position="top-left"
+        reverseOrder={false}
+      />
     </div>
   );
 }

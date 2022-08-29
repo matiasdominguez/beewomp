@@ -3,6 +3,7 @@ import useSound from 'use-sound';
 import { useLocation } from 'react-router-dom';
 import moment from 'moment';
 import './index.css';
+import toast from 'react-hot-toast';
 
 import laughTrack1 from '../../../sounds/laugh-track-1.mp3';
 import booWomp from '../../../sounds/boo-womp.mp3';
@@ -10,6 +11,15 @@ import booWomp from '../../../sounds/boo-womp.mp3';
 import Footer from '../../footer';
 import SoundButton from '../../sound-button';
 import { usePrevious } from '../../../utils/hooks';
+
+const toastOptions = {
+  style: {
+    border: '1px solid #ffc048',
+    padding: '16px',
+    color: '#ffc048',
+    backgroundColor: '#1e272e'
+  }
+}
 
 const Home = ({ user, firebase, setIsLoading }) => {
   const { pathname } = useLocation();
@@ -19,7 +29,7 @@ const Home = ({ user, firebase, setIsLoading }) => {
 
   const database = firebase.database();
 
-  const username = user.email || 'Guest'
+  const username = user.displayName || 'Guest'
 
   const handleUpdateRoomState = ({ roomState, key }) => {
     if (roomState === null) {
@@ -65,11 +75,14 @@ const Home = ({ user, firebase, setIsLoading }) => {
 
     if (soundHasBeenTriggered && canExtractId) {
       const [soundId, timeStamp] = roomState?.sound?.split('_')
+      const { triggeredBy }      = roomState
 
       const fiveSecondsAgo = moment().subtract(5, 'seconds')
       const whenTriggered  = moment(Number(timeStamp))
 
-      if (soundId && whenTriggered.isAfter(fiveSecondsAgo)) {
+      if (triggeredBy && soundId && whenTriggered.isAfter(fiveSecondsAgo)) {
+        toast(triggeredBy, { icon: '🐝' , ...toastOptions });
+
         setActiveSounds(currentActiveSounds => {
           if (currentActiveSounds.filter(s => s === soundId).length < 5) {
             return [...currentActiveSounds, soundId]
@@ -116,7 +129,6 @@ const Home = ({ user, firebase, setIsLoading }) => {
         }
       }
 
-
       return updatedActiveSounds
     });
   }
@@ -154,9 +166,6 @@ const Home = ({ user, firebase, setIsLoading }) => {
     return (
       <div className="page-home">
         <div className="page-home-container">
-          <pre>
-            {JSON.stringify({ activeSounds, roomState }, null, 2)}
-          </pre>
           <SoundButton
             soundId={'laughTrack1'}
             activeSounds={activeSounds}
