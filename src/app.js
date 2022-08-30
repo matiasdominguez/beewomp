@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
+  Route
 } from "react-router-dom";
 import "firebase/auth";
 import { FirestoreProvider } from "@react-firebase/firestore";

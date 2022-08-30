@@ -16,6 +16,7 @@ import wow from '../../../sounds/wow.mp3';
 import Footer from '../../footer';
 import SoundButton from '../../sound-button';
 import { usePrevious } from '../../../utils/hooks';
+import { containsSpecialChars } from '../../../utils/helpers';
 
 const DEFAULT_SOUND_LENGTH_RULE = 5;
 const DEFAULT_VOLUME = 40;
@@ -44,11 +45,6 @@ const getVolumeIcon = volume => {
   if (volume < 40) return '🔈';
   if (volume < 80) return '🔉';
   return '🔊';
-}
-
-const containsSpecialChars = str => {
-  const specialChars = /[`!@#$%^&*()+=\[\]{};':"\\|,.<>\/?~]/;
-  return specialChars.test(str);
 }
 
 const Home = ({ user, firebase, setIsLoading }) => {
