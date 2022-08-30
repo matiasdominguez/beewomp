@@ -24,7 +24,6 @@ import sound_partyblower from '../../../sounds/partyblower.mp3';
 import sound_nogod from '../../../sounds/nogod.mp3';
 import sound_funny from '../../../sounds/funny.mp3';
 import sound_patronage from '../../../sounds/patronage.mp3';
-import sound_victoryscreech from '../../../sounds/victoryscreech.mp3';
 import sound_coin from '../../../sounds/coin.mp3';
 import sound_founditem from '../../../sounds/founditem.mp3';
 import sound_danger from '../../../sounds/danger.mp3';
@@ -45,8 +44,15 @@ import sound_yay from '../../../sounds/yay.mp3';
 import sound_drumroll from '../../../sounds/drumroll.mp3';
 import sound_nicememe from '../../../sounds/nicememe.mp3';
 import sound_okaybye from '../../../sounds/okaybye.mp3';
+import sound_question from '../../../sounds/question.mp3';
+import sound_hoorayquestion from '../../../sounds/hoorayquestion.mp3';
+import sound_overnine from '../../../sounds/overnine.mp3';
+import sound_goodbye from '../../../sounds/goodbye.mp3';
 //* import sound_^5 from '../../../sounds/^5.mp3';
 //* import sound_^6 from '../../../sounds/^6.mp3';
+//* import sound_^7 from '../../../sounds/^7.mp3';
+//* import sound_^8 from '../../../sounds/^8.mp3';
+//* import sound_^9 from '../../../sounds/^9.mp3';
 //* import sound_# from '../../../sounds/#.mp3';
 
 import Footer from '../../footer';
@@ -58,9 +64,8 @@ const DEFAULT_SOUND_LENGTH_RULE = 5;
 const DEFAULT_VOLUME = 40;
 
 const getToastStyle = text => ({
-  border: `1px solid ${randomMaterialColor.getColor({ text })}`,
   color: `white`,
-  backgroundColor: `${randomMaterialColor.getColor({ text })}`
+  backgroundColor: `${randomMaterialColor.getColor({ shades: ['500'] })}`
 })
 
 const soundIcon = {
@@ -75,42 +80,63 @@ const soundIcon = {
   'myman': '👨‍🦰',
   'applause': '👏👏',
   'claps': '👏',
-  'brb': '🏃‍♂️',
+  'brb': '🏃‍♂️🎶',
   'suspense': '😰🎶',
   'incorrect': '❌🎶',
   'partyblower': '🥳',
   'nogod': '👎❗️',
   'funny': '😄',
   'patronage': '🫠',
-  'victoryscreech': '🙌',
   'coin': '🤑',
   'founditem': '📦',
   'danger': '⚠️',
   'airhorn': '📯',
   'youwhat': '🤨⁉️',
   'hurt': '🤕',
-  'notfine': '😭',
+  'notfine': '😭🎶',
   'legitness': '😁',
-  'xfiles': '👽',
-  'shutupmoney': '😠💰',
+  'xfiles': '👽🎶',
+  'shutupmoney': '💰',
   'morecoins': '💸',
-  'helloeverybody': '👋',
+  'helloeverybody': '🙋‍♂️',
   'helloquestion': '👋❓',
-  'hellosmall': '👋👶🏽',
+  'hellosmall': '👋',
   'alert': '🚨',
   'quack': '🦆',
   'yay': '🎊',
   'drumroll': '🥁',
   'nicememe': '😏',
-  'okaybye': '✌️',
+  'okaybye': '✌️🎶',
+  'question': '🫵❓',
+  'hoorayquestion': '🤷❓',
+  'overnine': '🤯',
+  'goodbye': '✌️',
   //* '^5': '🐝',
   //* '^6': '🐝',
+  //* '^7': '🐝',
+  //* '^8': '🐝',
+  //* '^9': '🐝',
   //* '#': '🐝',
 }
 
 const soundLengthRules = {
-  'laughtrack': 4,
-  'laughtrackmusic': 2
+  laughtrack: 4,
+  laughtrackmusic: 2,
+  nogod: 2,
+  claps: 3,
+  applause: 2,
+  yay: 3,
+  airhorn: 3,
+  overnine: 3,
+  notfine: 2,
+  brb: 2,
+  okaybye: 2,
+  incorrect: 2,
+  xfiles: 2,
+  suspense: 2,
+  question: 2,
+  hoorayquestion: 2,
+  drumroll: 2
 }
 
 const getVolumeIcon = volume => {
@@ -266,7 +292,6 @@ const Home = ({ user, firebase, setIsLoading }) => {
   const [play_nogod] = useSound(sound_nogod, { volume: volume / 100, onend: () => handleOnEnd('nogod') });
   const [play_funny] = useSound(sound_funny, { volume: volume / 100, onend: () => handleOnEnd('funny') });
   const [play_patronage] = useSound(sound_patronage, { volume: volume / 100, onend: () => handleOnEnd('patronage') });
-  const [play_victoryscreech] = useSound(sound_victoryscreech, { volume: volume / 100, onend: () => handleOnEnd('victoryscreech') });
   const [play_coin] = useSound(sound_coin, { volume: volume / 100, onend: () => handleOnEnd('coin') });
   const [play_founditem] = useSound(sound_founditem, { volume: volume / 100, onend: () => handleOnEnd('founditem') });
   const [play_danger] = useSound(sound_danger, { volume: volume / 100, onend: () => handleOnEnd('danger') });
@@ -287,8 +312,15 @@ const Home = ({ user, firebase, setIsLoading }) => {
   const [play_drumroll] = useSound(sound_drumroll, { volume: volume / 100, onend: () => handleOnEnd('drumroll') });
   const [play_nicememe] = useSound(sound_nicememe, { volume: volume / 100, onend: () => handleOnEnd('nicememe') });
   const [play_okaybye] = useSound(sound_okaybye, { volume: volume / 100, onend: () => handleOnEnd('okaybye') });
+  const [play_question] = useSound(sound_question, { volume: volume / 100, onend: () => handleOnEnd('question') });
+  const [play_hoorayquestion] = useSound(sound_hoorayquestion, { volume: volume / 100, onend: () => handleOnEnd('hoorayquestion') });
+  const [play_overnine] = useSound(sound_overnine, { volume: volume / 100, onend: () => handleOnEnd('overnine') });
+  const [play_goodbye] = useSound(sound_goodbye, { volume: volume / 100, onend: () => handleOnEnd('goodbye') });
   //* const [play_^5] = useSound(sound_^5, { volume: volume / 100, onend: () => handleOnEnd('^5') });
   //* const [play_^6] = useSound(sound_^6, { volume: volume / 100, onend: () => handleOnEnd('^6') });
+  //* const [play_^7] = useSound(sound_^7, { volume: volume / 100, onend: () => handleOnEnd('^7') });
+  //* const [play_^8] = useSound(sound_^8, { volume: volume / 100, onend: () => handleOnEnd('^8') });
+  //* const [play_^9] = useSound(sound_^9, { volume: volume / 100, onend: () => handleOnEnd('^9') });
   //* const [play_#] = useSound(sound_#, { volume: volume / 100, onend: () => handleOnEnd('#') });
 
   const lastSoundTriggered = activeSounds && activeSounds[activeSounds.length - 1]
@@ -319,7 +351,6 @@ const Home = ({ user, firebase, setIsLoading }) => {
     if (lastSoundTriggered === 'nogod') play_nogod();
     if (lastSoundTriggered === 'funny') play_funny();
     if (lastSoundTriggered === 'patronage') play_patronage();
-    if (lastSoundTriggered === 'victoryscreech') play_victoryscreech();
     if (lastSoundTriggered === 'coin') play_coin();
     if (lastSoundTriggered === 'founditem') play_founditem();
     if (lastSoundTriggered === 'danger') play_danger();
@@ -340,8 +371,15 @@ const Home = ({ user, firebase, setIsLoading }) => {
     if (lastSoundTriggered === 'drumroll') play_drumroll();
     if (lastSoundTriggered === 'nicememe') play_nicememe();
     if (lastSoundTriggered === 'okaybye') play_okaybye();
+    if (lastSoundTriggered === 'question') play_question();
+    if (lastSoundTriggered === 'hoorayquestion') play_hoorayquestion();
+    if (lastSoundTriggered === 'overnine') play_overnine();
+    if (lastSoundTriggered === 'goodbye') play_goodbye();
     //* if (lastSoundTriggered === '^5') play_^5();
     //* if (lastSoundTriggered === '^6') play_^6();
+    //* if (lastSoundTriggered === '^7') play_^7();
+    //* if (lastSoundTriggered === '^8') play_^8();
+    //* if (lastSoundTriggered === '^9') play_^9();
     //* if (lastSoundTriggered === '#') play_#();
   }
 
@@ -365,47 +403,53 @@ const Home = ({ user, firebase, setIsLoading }) => {
           </div>
           {
             [
-              'yes',
-              'nope',
-              'laughtrack',
-              'mariowhoa',
-              'wow',
-              'boowomp',
-              'yesomg',
-              'laughtrackmusic',
-              'myman',
-              'applause',
-              'claps',
-              'brb',
-              'suspense',
-              'incorrect',
-              'partyblower',
-              'nogod',
-              'funny',
-              'patronage',
-              'victoryscreech',
-              'coin',
-              'founditem',
-              'danger',
-              'airhorn',
-              'youwhat',
-              'hurt',
-              'notfine',
-              'legitness',
-              'xfiles',
-              'shutupmoney',
-              'morecoins',
-              'helloeverybody',
-              'helloquestion',
               'hellosmall',
-              'alert',
-              'quack',
+              'helloquestion',
+              'helloeverybody',
+              'yes',
+              'yesomg',
+              'myman',
+              'nope',
+              'nogod',
+              'youwhat',
+              'claps',
+              'applause',
               'yay',
-              'drumroll',
-              'nicememe',
+              'wow',
+              'partyblower',
+              'airhorn',
+              'mariowhoa',
+              'alert',
+              'founditem',
+              'funny',
+              'laughtrack',
+              'laughtrackmusic',
+              'coin',
+              'morecoins',
+              'shutupmoney',
+              'patronage',
+              'legitness',
+              'overnine',
+              'hurt',
+              'boowomp',
+              'notfine',
+              'goodbye',
               'okaybye',
+              'brb',
+              'incorrect',
+              'xfiles',
+              'suspense',
+              'question',
+              'quack',
+              'hoorayquestion',
+              'nicememe',
+              'drumroll',
+              'danger',
               //* '^5',
               //* '^6',
+              //* '^7',
+              //* '^8',
+              //* '^9',
               //* '#',
               ''
             ].map(soundId => (soundId !== '' &&
