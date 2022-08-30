@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import moment from 'moment';
 import './index.css';
 import toast from 'react-hot-toast';
+import randomMaterialColor from 'random-material-color';
 
 import laughTrack1 from '../../../sounds/laugh-track-1.mp3';
 import booWomp from '../../../sounds/boo-womp.mp3';
@@ -15,13 +16,11 @@ import { usePrevious } from '../../../utils/hooks';
 const DEFAULT_SOUND_LENGTH_RULE = 5;
 const DEFAULT_VOLUME = 40;
 
-const toastOptions = {
-  style: {
-    border: '1px solid #ffc048',
-    color: '#ffc048',
-    backgroundColor: '#1e272e'
-  }
-}
+const getToastStyle = text => ({
+  border: `1px solid ${randomMaterialColor.getColor({ text })}`,
+  color: `white`,
+  backgroundColor: `${randomMaterialColor.getColor({ text })}`
+})
 
 const soundIcon = {
   'laughTrack1': '😂',
@@ -110,7 +109,13 @@ const Home = ({ user, firebase, setIsLoading }) => {
       const whenTriggered  = moment(Number(timeStamp))
 
       if (triggeredBy && soundId && whenTriggered.isAfter(fiveSecondsAgo)) {
-        toast(triggeredBy, { icon: soundIcon[soundId] || '🐝', ...toastOptions });
+        toast(
+          triggeredBy,
+          {
+            icon:  soundIcon[soundId] || '🐝',
+            style: getToastStyle(username)
+          }
+        );
 
         setActiveSounds(currentActiveSounds => {
           if (currentActiveSounds && currentActiveSounds.filter(s => s === soundId).length < (soundLengthRules[soundId] || DEFAULT_SOUND_LENGTH_RULE)) {
