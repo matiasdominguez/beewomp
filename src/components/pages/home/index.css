@@ -35,3 +35,15 @@
 .page-home-join-room-btn:active { opacity: 0.25; }
 
 .page-home-join-room-btn-disabled { opacity: 0.1; }
+
+.volume-slider {
+  flex-basis: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.volume-slider-input {
+  width: 100px;
+  padding: 10px;
+  margin-left: 10px;
+}

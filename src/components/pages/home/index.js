@@ -13,6 +13,7 @@ import SoundButton from '../../sound-button';
 import { usePrevious } from '../../../utils/hooks';
 
 const DEFAULT_SOUND_LENGTH_RULE = 5;
+const DEFAULT_VOLUME = 40;
 
 const toastOptions = {
   style: {
@@ -29,6 +30,13 @@ const soundIcon = {
 
 const soundLengthRules = {
   'laughTrack1': 5
+}
+
+const getVolumeIcon = volume => {
+  if (volume === 0) return '🔇';
+  if (volume < 40) return '🔈';
+  if (volume < 80) return '🔉';
+  return '🔊';
 }
 
 const Home = ({ user, firebase, setIsLoading }) => {
@@ -75,6 +83,7 @@ const Home = ({ user, firebase, setIsLoading }) => {
   const [activeSounds, setActiveSounds] = useState([]);
   const [roomToJoin, setRoomToJoin]     = useState('');
   const [roomState, setRoomState]       = useState({});
+  const [volume, setVolume]             = useState(DEFAULT_VOLUME);
 
   const previousRoomState    = usePrevious(roomState);
   const previousActiveSounds = usePrevious(activeSounds);
@@ -143,8 +152,12 @@ const Home = ({ user, firebase, setIsLoading }) => {
     });
   }
 
-  const [playLaughTrack1] = useSound(laughTrack1, { onend: () => handleOnEnd('laughTrack1') });
-  const [playBooWomp]     = useSound(booWomp, { onend: () => handleOnEnd('booWomp') });
+  const handleChangeVolume = ({ target: { value }}) => {
+    setVolume(Number(value));
+  }
+
+  const [playLaughTrack1] = useSound(laughTrack1, { volume: volume / 100, onend: () => handleOnEnd('laughTrack1') });
+  const [playBooWomp]     = useSound(booWomp,     { volume: volume / 100, onend: () => handleOnEnd('booWomp') });
 
   const lastSoundTriggered = activeSounds && activeSounds[activeSounds.length - 1]
 
@@ -166,6 +179,18 @@ const Home = ({ user, firebase, setIsLoading }) => {
     return (
       <div className="page-home">
         <div className="page-home-container">
+          <div className="volume-slider">
+            {getVolumeIcon(volume)}
+            <input
+              className="volume-slider-input"
+              type="range"
+              min="0"
+              max="100"
+              value={volume}
+              step="20"
+              onChange={handleChangeVolume}
+            />
+          </div>
           {['laughTrack1', 'booWomp'].map(soundId => (
             <SoundButton
               soundId={soundId}
