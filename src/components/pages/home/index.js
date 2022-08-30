@@ -28,7 +28,7 @@ const soundIcon = {
 }
 
 const soundLengthRules = {
-  'laughTrack1': 2
+  'laughTrack1': 5
 }
 
 const Home = ({ user, firebase, setIsLoading }) => {
@@ -160,6 +160,8 @@ const Home = ({ user, firebase, setIsLoading }) => {
     if (lastSoundTriggered === 'booWomp')     playBooWomp();
   }
 
+  const canClickJoinRoom = roomToJoin !== ''
+
   if (hasJoinedRoom) {
     return (
       <div className="page-home">
@@ -183,18 +185,18 @@ const Home = ({ user, firebase, setIsLoading }) => {
       <div className="page-home">
         <div className="page-home-container">
           <input
+            className="page-home-join-room-input"
             type="text"
             value={roomToJoin}
             placeholder={'Enter room id.'}
             onChange={handleChangeRoomToJoin}
           />
-          <button
-            className="page-home-join-room-btn"
-            disabled={roomToJoin.length === 0}
-            onClick={handleClickJoinRoom}
+          <div
+            className={`page-home-join-room-btn${canClickJoinRoom ? '' : '-disabled'}`}
+            onClick={canClickJoinRoom ? () => handleClickJoinRoom() : () => {}}
           >
             Join Room
-          </button>
+          </div>
         </div>
         <Footer firebase={firebase} user={user} />
       </div>

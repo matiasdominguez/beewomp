@@ -29,7 +29,7 @@ function App({ isSignedIn, user, config, firebase }) {
   if (isLoading) {
     return (
       <div className="app-loading">
-        <ScaleLoader size={20} margin={5} color="white" />
+        <ScaleLoader size={20} margin={5} color="#ffc048" />
       </div>
     );
   }
