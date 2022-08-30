@@ -8,6 +8,10 @@ import randomMaterialColor from 'random-material-color';
 
 import laughTrack1 from '../../../sounds/laugh-track-1.mp3';
 import booWomp from '../../../sounds/boo-womp.mp3';
+import marioWhoa from '../../../sounds/mario-whoa.mp3';
+import yes from '../../../sounds/yes.mp3';
+import nope from '../../../sounds/nope.mp3';
+import wow from '../../../sounds/wow.mp3';
 
 import Footer from '../../footer';
 import SoundButton from '../../sound-button';
@@ -24,11 +28,15 @@ const getToastStyle = text => ({
 
 const soundIcon = {
   'laughTrack1': '😂',
-  'booWomp': '😢'
+  'booWomp': '😢',
+  'marioWhoa': '😮',
+  'yes': '👍',
+  'nope': '👎',
+  'wow': '🤩'
 }
 
 const soundLengthRules = {
-  'laughTrack1': 5
+  'laughTrack1': 4
 }
 
 const getVolumeIcon = volume => {
@@ -173,6 +181,10 @@ const Home = ({ user, firebase, setIsLoading }) => {
 
   const [playLaughTrack1] = useSound(laughTrack1, { volume: volume / 100, onend: () => handleOnEnd('laughTrack1') });
   const [playBooWomp]     = useSound(booWomp,     { volume: volume / 100, onend: () => handleOnEnd('booWomp') });
+  const [playMarioWhoa]   = useSound(marioWhoa,   { volume: volume / 100, onend: () => handleOnEnd('marioWhoa') });
+  const [playYes]         = useSound(yes,         { volume: volume / 100, onend: () => handleOnEnd('yes') });
+  const [playNope]        = useSound(nope,        { volume: volume / 100, onend: () => handleOnEnd('nope') });
+  const [playWow]         = useSound(wow,         { volume: volume / 100, onend: () => handleOnEnd('wow') });
 
   const lastSoundTriggered = activeSounds && activeSounds[activeSounds.length - 1]
 
@@ -186,6 +198,10 @@ const Home = ({ user, firebase, setIsLoading }) => {
   if (canPlaySound) {
     if (lastSoundTriggered === 'laughTrack1') playLaughTrack1();
     if (lastSoundTriggered === 'booWomp')     playBooWomp();
+    if (lastSoundTriggered === 'marioWhoa')   playMarioWhoa();
+    if (lastSoundTriggered === 'yes')         playYes();
+    if (lastSoundTriggered === 'nope')        playNope();
+    if (lastSoundTriggered === 'wow')         playWow();
   }
 
   const canClickJoinRoom = roomToJoin !== ''
@@ -206,16 +222,24 @@ const Home = ({ user, firebase, setIsLoading }) => {
               onChange={handleChangeVolume}
             />
           </div>
-          {['laughTrack1', 'booWomp'].map(soundId => (
-            <SoundButton
-              soundId={soundId}
-              activeSounds={activeSounds}
-              file={laughTrack1}
-              label={soundIcon[soundId] || `${soundId}`}
-              onEnd={handleOnEnd}
-              onClickPlay={handleOnClickPlay}
-            />
-          ))}
+          {
+            [
+              'laughTrack1',
+              'booWomp',
+              'marioWhoa',
+              'yes',
+              'nope',
+              'wow'
+            ].map(soundId => (
+              <SoundButton
+                soundId={soundId}
+                activeSounds={activeSounds}
+                label={soundIcon[soundId] || `${soundId}`}
+                onEnd={handleOnEnd}
+                onClickPlay={handleOnClickPlay}
+              />
+            ))
+          }
         </div>
         <Footer firebase={firebase} user={user} />
       </div>
