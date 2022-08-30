@@ -39,6 +39,11 @@ const getVolumeIcon = volume => {
   return '🔊';
 }
 
+const containsSpecialChars = str => {
+  const specialChars = /[`!@#$%^&*()+=\[\]{};':"\\|,.<>\/?~]/;
+  return specialChars.test(str);
+}
+
 const Home = ({ user, firebase, setIsLoading }) => {
   const { pathname } = useLocation();
 
@@ -75,15 +80,20 @@ const Home = ({ user, firebase, setIsLoading }) => {
 
   useEffect(() => {
     if (roomId) {
-      assignRoomStateUpdateEvent()
+      if (!containsSpecialChars(roomId)) {
+        assignRoomStateUpdateEvent()
+      } else {
+        setIsInvalidRoom(true);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [0])
 
-  const [activeSounds, setActiveSounds] = useState([]);
-  const [roomToJoin, setRoomToJoin]     = useState('');
-  const [roomState, setRoomState]       = useState({});
-  const [volume, setVolume]             = useState(DEFAULT_VOLUME);
+  const [activeSounds, setActiveSounds]   = useState([]);
+  const [roomToJoin, setRoomToJoin]       = useState('');
+  const [roomState, setRoomState]         = useState({});
+  const [volume, setVolume]               = useState(DEFAULT_VOLUME);
+  const [isInvalidRoom, setIsInvalidRoom] = useState(false)
 
   const previousRoomState    = usePrevious(roomState);
   const previousActiveSounds = usePrevious(activeSounds);
@@ -175,7 +185,7 @@ const Home = ({ user, firebase, setIsLoading }) => {
 
   const canClickJoinRoom = roomToJoin !== ''
 
-  if (hasJoinedRoom) {
+  if (hasJoinedRoom && !isInvalidRoom) {
     return (
       <div className="page-home">
         <div className="page-home-container">
@@ -223,6 +233,7 @@ const Home = ({ user, firebase, setIsLoading }) => {
             Join Room
           </div>
         </div>
+        {isInvalidRoom && <div className="invalid-room-message">Invalid Room ID: {roomId}</div>}
         <Footer firebase={firebase} user={user} />
       </div>
     );
