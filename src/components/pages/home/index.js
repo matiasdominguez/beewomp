@@ -63,6 +63,9 @@ import { containsSpecialChars } from '../../../utils/helpers';
 const DEFAULT_SOUND_LENGTH_RULE = 5;
 const DEFAULT_VOLUME = 40;
 
+const CLICK_LIMIT = 2;
+const CLICK_RESET_MS = 2000;
+
 const getToastStyle = text => ({
   color: `white`,
   backgroundColor: `${randomMaterialColor.getColor({ shades: ['500'] })}`
@@ -195,7 +198,8 @@ const Home = ({ user, firebase, setIsLoading }) => {
   const [roomToJoin, setRoomToJoin]       = useState('');
   const [roomState, setRoomState]         = useState({});
   const [volume, setVolume]               = useState(DEFAULT_VOLUME);
-  const [isInvalidRoom, setIsInvalidRoom] = useState(false)
+  const [isInvalidRoom, setIsInvalidRoom] = useState(false);
+  const [clicks, setClicks]               = useState(0);
 
   const previousRoomState    = usePrevious(roomState);
   const previousActiveSounds = usePrevious(activeSounds);
@@ -238,17 +242,33 @@ const Home = ({ user, firebase, setIsLoading }) => {
     window.location.assign(`/${roomToJoin}`);
   }
 
-  const handleOnClickPlay = soundId => {
-    const stateRef = database.ref(`/${roomId}`);
+  const resetClicks = () => {
+    setTimeout(() => {
+      setClicks(0)
+    }, CLICK_RESET_MS)
+  }
 
-    stateRef
-      .set({
-        triggeredBy: username,
-        sound:       `${soundId}_${Date.now()}`
-      })
-      .then(() => {
-        console.log(`Setting sound: ${soundId}`)
-      })
+  useEffect(() => {
+    if (clicks >= CLICK_LIMIT) {
+      resetClicks();
+    }
+  }, [clicks])
+
+  const handleOnClickPlay = soundId => {
+    if (clicks < CLICK_LIMIT) {
+      setClicks(clicks => clicks + 1);
+
+      const stateRef = database.ref(`/${roomId}`);
+
+      stateRef
+        .set({
+          triggeredBy: username,
+          sound:       `${soundId}_${Date.now()}`
+        })
+        .then(() => {
+          console.log(`Setting sound: ${soundId}`)
+        })
+    }
   }
 
   const handleOnEnd = soundId => {
@@ -397,7 +417,7 @@ const Home = ({ user, firebase, setIsLoading }) => {
               min="0"
               max="100"
               value={volume}
-              step="20"
+              step="5"
               onChange={handleChangeVolume}
             />
           </div>
